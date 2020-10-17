@@ -1,16 +1,16 @@
-module.exports = function (id, cb) {
+module.exports = function (username, cb) {
   const sql = `
-    SELECT username, role
+    SELECT username, role, password
     FROM Users
-    WHERE id = ?
+    WHERE username = ?
   `
-  this.DB.get(sql, id, function (err, row) {
+  this.DB.get(sql, username, function (err, row) {
     if (err) {
       console.log(err);
       return
     } else {
       console.log(row);
-      cb({ username: row.username, role: row.role });
+      cb(row);
     }
   });
 }

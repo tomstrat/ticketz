@@ -1,4 +1,4 @@
-module.exports = function ({ username, password, role }) {
+module.exports = function ({ username, password, role }, cb) {
   const sql = `
     INSERT INTO Users (username, password, role)
     VALUES (?, ?, ?)
@@ -9,6 +9,7 @@ module.exports = function ({ username, password, role }) {
       return
     } else {
       console.log(`User Added! ID: ${this.lastID}, Row: ${this.changes}`);
+      cb(this.lastID);
     }
   });
 }
