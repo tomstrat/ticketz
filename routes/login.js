@@ -1,6 +1,7 @@
 const form = require('../views/login');
 const layout = require('../views/layout');
 const success = require("../views/success");
+const comparePasswords = require("../utilities/comparepasswords");
 
 module.exports = (app, DB) => {
   app.get('/login', (req, res) => {
@@ -11,8 +12,15 @@ module.exports = (app, DB) => {
 
     const { username, password } = req.body;
 
-    DB.getUser(username, (data) => {
-      if (!data || password !== data.password) {
+    DB.getUser(username, async (data) => {
+      //CHECK USERNAME EXISTS
+      if (!data) {
+        return res.send(layout(form("Username or Password are incorrect!")));
+      }
+
+      //CHECK PASSWORDS MATCH
+      const validPassword = await comparePasswords(password, data.password);
+      if (!validPassword) {
         return res.send(layout(form("Username or Password are incorrect!")));
       } else {
         req.session.userId = data.username;
