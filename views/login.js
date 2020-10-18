@@ -1,5 +1,7 @@
+const layout = require("./layout");
+
 module.exports = (error) => {
-  return `
+  return layout(`
   <h3>Login to Ticketz</h3>
   <div>
     <form method="POST" action="/login">
@@ -9,5 +11,5 @@ module.exports = (error) => {
       <p class="error">${error}</p>
     </form>
   </div>
-`;
+`);
 };

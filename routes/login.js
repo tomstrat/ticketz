@@ -2,6 +2,7 @@ const form = require('../views/login');
 const layout = require('../views/layout');
 const success = require("../views/success");
 const comparePasswords = require("../utilities/comparepasswords");
+const { check } = require("express-validator");
 
 module.exports = (app, DB) => {
   app.get('/login', (req, res) => {

@@ -17,7 +17,7 @@ app.use(cookieSession({
 app.use(express.static("./public"));
 
 require('./routes/login')(app, DB);
-require("./routes/users")(app, DB);
+require("./routes/admin/users")(app, DB);
 require("./routes/logout")(app, DB);
 
 const PORT = process.env.PORT || 3000;
