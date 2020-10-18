@@ -2,13 +2,15 @@ const adduser = require('../views/adduser');
 const addUserForm = require('../views/adduser');
 const layout = require('../views/layout');
 
+const { requireAuth } = require("./middlewares");
+
 
 module.exports = (app, DB) => {
-  app.get('/users/new', (req, res) => {
+  app.get('/users/new', requireAuth("admin"), (req, res) => {
     res.send(layout(addUserForm('')));
   });
 
-  app.post("/users/new", async (req, res) => {
+  app.post("/users/new", requireAuth("admin"), async (req, res) => {
     const { username, password, pwconfirmation, role } = req.body;
 
     //Check user exists
