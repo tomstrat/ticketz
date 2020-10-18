@@ -1,6 +1,7 @@
 const layout = require("./layout");
+const { getError } = require("../utilities/getError");
 
-module.exports = (error) => {
+module.exports = ({ errors }) => {
   return layout(`
   <h3>Login to Ticketz</h3>
   <div>
@@ -8,7 +9,7 @@ module.exports = (error) => {
       <input type="text" name="username" placeholder="Username">
       <input type="password" name="password" placeholder="Password">
       <input type="submit">
-      <p class="error">${error}</p>
+      ${getError(errors, "username") ? getError(errors, "username") : getError(errors, "password")}
     </form>
   </div>
 `);

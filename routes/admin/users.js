@@ -6,7 +6,7 @@ const validators = require("../validators");
 module.exports = (app, DB) => {
 
   //DESTRUCTURE THIS HERE SO I CAN PASS DB IN
-  const { requireUsername, requirePassword, requirePasswordConfirmation } = validators(DB)
+  const { requireNewUsername, requireNewPassword, requirePasswordConfirmation } = validators(DB)
 
   app.get('/users/new', requireAuth("admin"), (req, res) => {
     res.send(addUserForm({}));
@@ -15,8 +15,8 @@ module.exports = (app, DB) => {
   app.post(
     "/users/new",
     [
-      requireUsername,
-      requirePassword,
+      requireNewUsername,
+      requireNewPassword,
       requirePasswordConfirmation
     ], handleErrors(addUserForm), async (req, res) => {
       const { username, password, role } = req.body;
