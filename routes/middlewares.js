@@ -13,7 +13,7 @@ module.exports = {
         }
 
 
-        console.log(errors);
+        console.log(`Errors: ${errors}`);
         return res.send(templateFunc({ errors, data }));
       }
 
@@ -42,7 +42,6 @@ module.exports = {
 
   checkSelf(req, res, next) {
     if (req.session.userId === req.params.username) {
-      console.log("hello");
       res.redirect("/users");
     } else {
       next();
