@@ -1,14 +1,15 @@
-module.exports = function (id) {
+module.exports = function (username, cb) {
   const sql = `
     DELETE FROM Users
-    WHERE id = ?
+    WHERE username = ?
   `
-  this.DB.run(sql, id, function (err) {
+  this.DB.run(sql, username, function (err) {
     if (err) {
       console.log(err);
       return
     } else {
       console.log(`User Deleted!`);
+      cb();
     }
   });
 }

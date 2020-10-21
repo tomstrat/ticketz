@@ -4,6 +4,19 @@ const comparePasswords = require("../utilities/comparepasswords");
 
 module.exports = (DB) => {
   return {
+    requireUsername: check("username")
+      .trim()
+      .escape()
+      .custom(async username => {
+        return await new Promise((resolve, reject) => {
+          DB.getUser(username, (data) => {
+            if (!data) {
+              reject("Username or password incorrect");
+            }
+            resolve();
+          });
+        });
+      }),
     requireNewUsername: check("username")
       .trim()
       .escape()
@@ -17,18 +30,21 @@ module.exports = (DB) => {
           });
         });
       }),
-    requireUsername: check("username")
+    requireEditUsername: check("username")
       .trim()
       .escape()
-      .custom(async username => {
-        return await new Promise((resolve, reject) => {
-          DB.getUser(username, (data) => {
-            if (!data) {
-              reject("Username or password incorrect");
-            }
+      .custom(async (username, { req }) => {
+        //Check if username is own name
+        if (req.session.userId !== username) {
+          return await new Promise((resolve, reject) => {
+            DB.getUser(username, (data) => {
+              if (data) {
+                reject("Username already exists!");
+              }
+            });
             resolve();
           });
-        });
+        }
       }),
     requirePassword: check("password")
       .trim()
@@ -57,6 +73,22 @@ module.exports = (DB) => {
       .escape()
       .isLength({ min: 4, max: 20 })
       .withMessage("Must be between 4 and 20 characters")
+      .custom((pwconfirmation, { req }) => {
+        if (pwconfirmation !== req.body.password) {
+          throw new Error("Passwords must match");
+        } else {
+          return true;
+        }
+      }),
+    requireEditPassword: check("password")
+      .optional({ checkFalsy: true })
+      .trim()
+      .escape()
+      .isLength({ min: 4, max: 20 })
+      .withMessage("Must be between 4 and 20 characters"),
+    requireEditPasswordConfirmation: check("pwconfirmation")
+      .trim()
+      .escape()
       .custom((pwconfirmation, { req }) => {
         if (pwconfirmation !== req.body.password) {
           throw new Error("Passwords must match");
