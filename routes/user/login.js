@@ -22,7 +22,7 @@ module.exports = (app, DB) => {
       DB.getUser(req.body.username, data => {
         req.session.userId = data.username;
         req.session.userRole = data.role;
-        return res.send(success(req.session.role));
+        return res.redirect("/ticketz");
       });
 
     });

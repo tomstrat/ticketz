@@ -1,8 +1,10 @@
 module.exports = function (id, cb) {
+
   const sql = `
-    SELECT user_id, title, desc, resolved, publish_date, resolve_date
+    SELECT username, title, desc, resolved, publish_date, resolve_date
     FROM Tickets
-    WHERE id = ?
+    INNER JOIN Users ON Users.id = Tickets.user_id
+    WHERE Tickets.id = ?
   `
   this.DB.get(sql, id, function (err, row) {
     if (err) {
@@ -11,12 +13,12 @@ module.exports = function (id, cb) {
     } else {
       console.log(row);
       cb({
-        userID: row.userid,
+        username: row.username,
         title: row.title,
         desc: row.desc,
         resolved: row.resolved,
-        publishDate: row.publishdate,
-        resolveDate: row.resolvedate
+        publishDate: row.publish_date,
+        resolveDate: row.resolve_date
       });
     }
   });

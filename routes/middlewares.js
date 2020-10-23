@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { dbSchema } = require("../database/dbSchema");
 
 module.exports = {
   handleErrors(templateFunc, dataCb) {
@@ -46,5 +47,20 @@ module.exports = {
     } else {
       next();
     }
+  },
+
+  checkMyTicket(req, res, next) {
+    if (req.session.userRole === "user") {
+      DB.getTicket(req.params.id, (data) => {
+        if (data.username !== req.session.userId) {
+          req.redirect("/404");
+        } else {
+          next();
+        }
+      })
+    } else {
+      next();
+    }
   }
+
 }
