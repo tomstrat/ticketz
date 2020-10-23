@@ -1,13 +1,14 @@
 const layout = require("../layout");
 
-module.exports = ({ tickets }) => {
+module.exports = ({ tickets, admin }) => {
 
   const renderedTickets = tickets.map(ticket => {
     return `
       <tr>
-        <td>${ticket.username}</td>
+        ${admin ? "<td>" + ticket.username + "</td>" : ""}
         <td><a href="/ticketz/${ticket.id}"/>${ticket.title}</a></td>
-        <td>${ticket.publishDate}</td>
+        <td>${ticket.publish_date}</td>
+        <td>${ticket.resolve_date}</td>
         <td>${ticket.resolved}</td>
       </tr>
     `;
@@ -21,10 +22,11 @@ module.exports = ({ tickets }) => {
   <table>
     <thead>
       <tr>
-        <th>Username</th>
+        ${admin ? "<th>Username</th>" : ""}
         <th>Title</th>
         <th>Created</th>
         <th>Resolved</th>
+        <th>Resolve</th>
       <tr>
     </thead>
     <tbody>

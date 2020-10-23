@@ -1,6 +1,6 @@
 module.exports = function (username, cb) {
   const sql = `
-    SELECT username, role, password
+    SELECT id, username, role, password
     FROM Users
     WHERE username = ?
   `

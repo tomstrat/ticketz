@@ -95,6 +95,16 @@ module.exports = (DB) => {
         } else {
           return true;
         }
-      })
+      }),
+    requireTitle: check("title")
+      .trim()
+      .escape()
+      .isLength({ min: 4, max: 40 })
+      .withMessage("Must be between 4 and 40 characters"),
+    requireDesc: check("desc")
+      .trim()
+      .escape()
+      .isLength({ min: 1, max: 500 })
+      .withMessage("Must be between 4 and 40 characters")
   }
 }

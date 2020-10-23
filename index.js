@@ -19,6 +19,7 @@ app.use(express.static("./public"));
 require('./routes/user/login')(app, DB);
 require("./routes/admin/users")(app, DB);
 require("./routes/user/logout")(app, DB);
+require("./routes/ticketz/tickets")(app, DB);
 
 const PORT = process.env.PORT || 3000;
 

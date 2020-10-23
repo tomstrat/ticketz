@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Tickets (
   desc text NOT NULL,
   resolved integer NOT NULL,
   publish_date date NOT NULL,
-  resolve_date date,
+  resolve_date date NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
 `;

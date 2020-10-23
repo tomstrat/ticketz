@@ -1,7 +1,8 @@
 module.exports = function (cb) {
   const sql = `
-    SELECT user_id, title, desc, resolved, publish_date, resolve_date
+    SELECT Tickets.id, username, title, desc, resolved, publish_date, resolve_date
     FROM Tickets
+    INNER JOIN Users on Users.id = Tickets.user_id
   `
   this.DB.all(sql, [], function (err, rows) {
     if (err) {
