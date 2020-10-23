@@ -3,6 +3,7 @@ module.exports = function (userId, cb) {
     SELECT id, title, desc, resolved, publish_date, resolve_date
     FROM Tickets
     WHERE user_id = ?
+    AND resolved = 0
   `
   this.DB.all(sql, userId, function (err, rows) {
     if (err) {

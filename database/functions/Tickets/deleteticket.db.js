@@ -1,4 +1,4 @@
-module.exports = function (id) {
+module.exports = function (id, cb) {
   const sql = `
     DELETE FROM Tickets
     WHERE id = ?
@@ -9,6 +9,7 @@ module.exports = function (id) {
       return
     } else {
       console.log(`Ticket Deleted!`);
+      cb();
     }
   });
 }

@@ -1,7 +1,7 @@
 module.exports = function (id, cb) {
 
   const sql = `
-    SELECT username, title, desc, resolved, publish_date, resolve_date
+    SELECT Tickets.id, username, title, desc, resolved, publish_date, resolve_date
     FROM Tickets
     INNER JOIN Users ON Users.id = Tickets.user_id
     WHERE Tickets.id = ?
@@ -13,6 +13,7 @@ module.exports = function (id, cb) {
     } else {
       console.log(row);
       cb({
+        id: row.id,
         username: row.username,
         title: row.title,
         desc: row.desc,

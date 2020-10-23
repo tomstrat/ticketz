@@ -49,17 +49,19 @@ module.exports = {
     }
   },
 
-  checkMyTicket(req, res, next) {
-    if (req.session.userRole === "user") {
-      DB.getTicket(req.params.id, (data) => {
-        if (data.username !== req.session.userId) {
-          req.redirect("/404");
-        } else {
-          next();
-        }
-      })
-    } else {
-      next();
+  checkMyTicket(DB) {
+    return (req, res, next) => {
+      if (req.session.userRole === "user") {
+        DB.getTicket(req.params.id, (data) => {
+          if (data.username !== req.session.userId) {
+            res.redirect("/404");
+          } else {
+            next();
+          }
+        })
+      } else {
+        next();
+      }
     }
   }
 

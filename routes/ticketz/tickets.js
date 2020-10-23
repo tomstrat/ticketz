@@ -31,15 +31,30 @@ module.exports = (app, DB) => {
     res.send(addTicketForm({}));
   });
 
-  app.get("/ticketz/:id", requireAuth(["admin", "reviewer", "user"]), checkMyTicket, (req, res) => {
+  app.get("/ticketz/:id", requireAuth(["admin", "reviewer", "user"]), checkMyTicket(DB), (req, res) => {
     const admin = req.session.userRole === "user" ? false : true;
     DB.getTicket(req.params.id, (data) => {
       res.send(singleTicketPage({ ticket: data, admin }));
     });
   });
 
+  app.post("/ticketz/:id/delete", requireAuth(["admin", "reviewer", "user"]), (req, res) => {
+    DB.deleteTicket(req.params.id, () => {
+      res.redirect("/ticketz");
+    });
+  });
 
+  app.post("/ticketz/:id/resolve", requireAuth(["admin", "reviewer", "user"]), (req, res) => {
+    DB.updateTicket({ bool: 1, id: req.params.id }, () => {
+      res.redirect("/ticketz");
+    });
+  });
 
+  app.post("/ticketz/:id/unresolve", requireAuth(["admin", "reviewer", "user"]), (req, res) => {
+    DB.updateTicket({ bool: 0, id: req.params.id }, () => {
+      res.redirect("/ticketz");
+    });
+  });
 
   app.post(
     "/ticketz/new",
