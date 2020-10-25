@@ -5,6 +5,7 @@ module.exports = {
   handleErrors(templateFunc, dataCb) {
     return (req, res, next) => {
       const errors = validationResult(req);
+      const admin = req.session.userRole;
 
       if (!errors.isEmpty()) {
 
@@ -15,7 +16,7 @@ module.exports = {
 
 
         console.log(`Errors: ${errors}`);
-        return res.send(templateFunc({ errors, data }));
+        return res.send(templateFunc({ errors, data, admin }));
       }
 
       next()
@@ -32,7 +33,7 @@ module.exports = {
         }
       })
       if (!validRole) {
-        res.redirect("/404");
+        res.redirect("/");
       } else {
         next();
       }

@@ -33,5 +33,6 @@ module.exports = ({ tickets, admin }) => {
       ${renderedTickets}
     <tbody>
   </table>
-`);
+  <a class="button" href="/ticketz/new">New Ticket</a>
+`, admin);
 };

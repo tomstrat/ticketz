@@ -1,7 +1,7 @@
 const layout = require("../layout");
 const { getError } = require("../../utilities/getError");
 
-module.exports = ({ errors }) => {
+module.exports = ({ errors, cb, admin }) => {
   return layout(`
   <h3>Add Ticket</h3>
   <div>
@@ -13,5 +13,5 @@ module.exports = ({ errors }) => {
       <input type="submit">
     </form>
   </div>
-`);
+`, admin);
 };

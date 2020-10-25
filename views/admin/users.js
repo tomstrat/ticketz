@@ -40,5 +40,6 @@ module.exports = ({ users }) => {
       ${renderedUsers}
     <tbody>
   </table>
-`);
+  <a href="/users/new">New User</a>
+`, "admin");
 };

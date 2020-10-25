@@ -31,5 +31,5 @@ module.exports = ({ ticket, admin }) => {
   ${admin ? deleteForm : ""}
   ${admin && ticket.resolved ? unresolveForm : ""}
   ${admin && !ticket.resolved ? resolveForm : ""}
-`);
+`, admin);
 };

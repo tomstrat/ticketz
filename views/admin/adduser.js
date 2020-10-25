@@ -20,5 +20,5 @@ module.exports = ({ errors }) => {
       <input type="submit">
     </form>
   </div>
-`);
+`, "admin");
 };

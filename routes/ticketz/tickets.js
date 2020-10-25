@@ -28,7 +28,7 @@ module.exports = (app, DB) => {
   });
 
   app.get('/ticketz/new', requireAuth(["admin", "reviewer", "user"]), (req, res) => {
-    res.send(addTicketForm({}));
+    res.send(addTicketForm({ admin: req.session.userRole }));
   });
 
   app.get("/ticketz/:id", requireAuth(["admin", "reviewer", "user"]), checkMyTicket(DB), (req, res) => {
