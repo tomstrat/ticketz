@@ -7,7 +7,7 @@ module.exports = function ({ bool, id }, cb) {
       resolve_date = ?
     WHERE id = ?
   `
-  const resolved = moment().format("DD MM YYYY");
+  const resolved = moment().format("DD/MM/YYYY");
 
   if (bool === 1) {
     this.DB.run(sql, [bool, resolved, id], function (err) {

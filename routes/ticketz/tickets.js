@@ -17,12 +17,12 @@ module.exports = (app, DB) => {
     if (req.session.userRole === "user") {
       DB.getUser(req.session.userId, (data) => {
         DB.getMyTickets(data.id, (tickets) => {
-          res.send(ticketsPage({ tickets, admin: false }));
+          res.send(ticketsPage({ tickets, admin: req.session.userRole }));
         });
       });
     } else {
       DB.getAllTickets((data) => {
-        res.send(ticketsPage({ tickets: data, admin: true }))
+        res.send(ticketsPage({ tickets: data, admin: req.session.userRole }))
       });
     }
   });
@@ -32,13 +32,12 @@ module.exports = (app, DB) => {
   });
 
   app.get("/ticketz/:id", requireAuth(["admin", "reviewer", "user"]), checkMyTicket(DB), (req, res) => {
-    const admin = req.session.userRole === "user" ? false : true;
     DB.getTicket(req.params.id, (data) => {
-      res.send(singleTicketPage({ ticket: data, admin }));
+      res.send(singleTicketPage({ ticket: data, admin: req.session.userRole }));
     });
   });
 
-  app.post("/ticketz/:id/delete", requireAuth(["admin", "reviewer", "user"]), (req, res) => {
+  app.post("/ticketz/:id/delete", requireAuth(["admin"]), (req, res) => {
     DB.deleteTicket(req.params.id, () => {
       res.redirect("/ticketz");
     });

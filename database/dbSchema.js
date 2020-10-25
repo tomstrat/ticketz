@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Users (
 );
 CREATE TABLE IF NOT EXISTS Tickets (
   id integer NOT NULL PRIMARY KEY,
-  user_id integer NOT NULL UNIQUE,
+  user_id integer NOT NULL,
   title text NOT NULL,
   desc text NOT NULL,
   resolved integer NOT NULL,

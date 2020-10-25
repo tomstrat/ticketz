@@ -1,15 +1,16 @@
 const layout = require("../layout");
 
 module.exports = ({ tickets, admin }) => {
+  console.log("role is: " + admin);
 
   const renderedTickets = tickets.map(ticket => {
     return `
       <tr>
-        ${admin ? "<td>" + ticket.username + "</td>" : ""}
+        ${admin !== "user" ? "<td>" + ticket.username + "</td>" : ""}
         <td><a href="/ticketz/${ticket.id}"/>${ticket.title}</a></td>
         <td>${ticket.publish_date}</td>
         <td>${ticket.resolve_date}</td>
-        <td>${ticket.resolved}</td>
+        <td>${ticket.resolved ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}</td>
       </tr>
     `;
   }).join("");
@@ -22,7 +23,7 @@ module.exports = ({ tickets, admin }) => {
   <table>
     <thead>
       <tr>
-        ${admin ? "<th>Username</th>" : ""}
+        ${admin !== "user" ? "<th>Username</th>" : ""}
         <th>Title</th>
         <th>Created</th>
         <th>Resolved</th>

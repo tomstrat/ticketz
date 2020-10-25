@@ -5,7 +5,7 @@ module.exports = function ({ userID, title, desc }) {
     INSERT INTO Tickets (user_id, title, desc, resolved, publish_date, resolve_date)
     VALUES (?, ?, ?, ?, ?, ?)
   `
-  const published = moment().format("DD MM YYYY");
+  const published = moment().format("DD/MM/YYYY");
 
   this.DB.run(sql, [userID, title, desc, 0, published, ""], function (err) {
     if (err) {

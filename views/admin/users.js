@@ -40,6 +40,6 @@ module.exports = ({ users }) => {
       ${renderedUsers}
     <tbody>
   </table>
-  <a href="/users/new">New User</a>
+  <a class="button" href="/users/new">New User</a>
 `, "admin");
 };
