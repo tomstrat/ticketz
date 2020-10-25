@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +20,8 @@
     "nodemon": "^2.0.5",
     "sqlite3": "^5.0.0",
     "sweetalert2": "^10.6.1"
+  },
+  "engines": {
+    "node": "13.x"
   }
 }
