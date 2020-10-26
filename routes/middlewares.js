@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { dbSchema } = require("../database/dbSchema");
+const errorPage = require("../views/404");
 
 module.exports = {
   handleErrors(templateFunc, dataCb) {
@@ -55,7 +55,7 @@ module.exports = {
       if (req.session.userRole === "user") {
         DB.getTicket(req.params.id, (data) => {
           if (data.username !== req.session.userId) {
-            res.redirect("/404");
+            res.status(404).send(errorPage({ admin: req.session.userRole }));
           } else {
             next();
           }
@@ -63,6 +63,28 @@ module.exports = {
       } else {
         next();
       }
+    }
+  },
+  checkTicketExists(DB) {
+    return (req, res, next) => {
+      DB.getTicket(req.params.id, (data) => {
+        if (!data) {
+          res.status(404).send(errorPage({ admin: req.session.userRole }));
+        } else {
+          next();
+        }
+      });
+    }
+  },
+  checkUserExists(DB) {
+    return (req, res, next) => {
+      DB.getUser(req.params.username, (data) => {
+        if (!data) {
+          res.status(404).send(errorPage({ admin: req.session.userRole }));
+        } else {
+          next();
+        }
+      });
     }
   }
 

@@ -1,7 +1,8 @@
+const { check } = require('express-validator');
 const addTicketForm = require('../../views/ticketz/addticket');
 const ticketsPage = require("../../views/ticketz/tickets");
 const singleTicketPage = require("../../views/ticketz/viewticket");
-const { handleErrors, requireAuth, checkMyTicket } = require("../middlewares");
+const { handleErrors, requireAuth, checkMyTicket, checkTicketExists } = require("../middlewares");
 const validators = require("../validators");
 
 module.exports = (app, DB) => {
@@ -31,29 +32,39 @@ module.exports = (app, DB) => {
     res.send(addTicketForm({ admin: req.session.userRole }));
   });
 
-  app.get("/ticketz/:id", requireAuth(["admin", "reviewer", "user"]), checkMyTicket(DB), (req, res) => {
-    DB.getTicket(req.params.id, (data) => {
-      res.send(singleTicketPage({ ticket: data, admin: req.session.userRole }));
+  app.get(
+    "/ticketz/:id",
+    requireAuth(["admin", "reviewer", "user"]),
+    checkMyTicket(DB),
+    checkTicketExists(DB), (req, res) => {
+      DB.getTicket(req.params.id, (data) => {
+        res.send(singleTicketPage({ ticket: data, admin: req.session.userRole }));
+      });
     });
-  });
 
-  app.post("/ticketz/:id/delete", requireAuth(["admin"]), (req, res) => {
+  app.post("/ticketz/:id/delete", requireAuth(["admin"]), checkTicketExists(DB), (req, res) => {
     DB.deleteTicket(req.params.id, () => {
       res.redirect("/ticketz");
     });
   });
 
-  app.post("/ticketz/:id/resolve", requireAuth(["admin", "reviewer", "user"]), (req, res) => {
-    DB.updateTicket({ bool: 1, id: req.params.id }, () => {
-      res.redirect("/ticketz");
+  app.post(
+    "/ticketz/:id/resolve",
+    requireAuth(["admin", "reviewer", "user"]),
+    checkTicketExists(DB), (req, res) => {
+      DB.updateTicket({ bool: 1, id: req.params.id }, () => {
+        res.redirect("/ticketz");
+      });
     });
-  });
 
-  app.post("/ticketz/:id/unresolve", requireAuth(["admin", "reviewer", "user"]), (req, res) => {
-    DB.updateTicket({ bool: 0, id: req.params.id }, () => {
-      res.redirect("/ticketz");
+  app.post(
+    "/ticketz/:id/unresolve",
+    requireAuth(["admin", "reviewer", "user"]),
+    checkTicketExists(DB), (req, res) => {
+      DB.updateTicket({ bool: 0, id: req.params.id }, () => {
+        res.redirect("/ticketz");
+      });
     });
-  });
 
   app.post(
     "/ticketz/new",

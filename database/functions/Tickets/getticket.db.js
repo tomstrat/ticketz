@@ -9,7 +9,9 @@ module.exports = function (id, cb) {
   this.DB.get(sql, id, function (err, row) {
     if (err) {
       console.log(err);
-      return
+      return;
+    } else if (!row) {
+      cb(false);
     } else {
       console.log(row);
       cb({

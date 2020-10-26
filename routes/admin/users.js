@@ -1,7 +1,7 @@
 const addUserForm = require('../../views/admin/adduser');
 const usersPage = require("../../views/admin/users");
 const editUsersForm = require("../../views/admin/edituser");
-const { handleErrors, requireAuth, checkSelf } = require("../middlewares");
+const { handleErrors, requireAuth, checkSelf, checkUserExists } = require("../middlewares");
 const validators = require("../validators");
 
 
@@ -28,14 +28,17 @@ module.exports = (app, DB) => {
     res.send(addUserForm({}));
   });
 
-  app.get("/users/:username/edit", requireAuth(["admin"]), checkSelf, (req, res) => {
-    //CANT EDIT SELF
+  app.get(
+    "/users/:username/edit",
+    requireAuth(["admin"]),
+    checkSelf, checkUserExists(DB), (req, res) => {
+      //CANT EDIT SELF
 
-    DB.getUser(req.params.username, (data) => {
-      res.send(editUsersForm({ errors: "", data }));
+      DB.getUser(req.params.username, (data) => {
+        res.send(editUsersForm({ errors: "", data }));
+      });
+
     });
-
-  });
 
   app.post(
     "/users/:username/edit",
@@ -47,7 +50,8 @@ module.exports = (app, DB) => {
     handleErrors(editUsersForm, req => {
       return { username: req.body.username, role: req.body.role }
     }),
-    requireAuth(["admin"]), checkSelf, (req, res) => {
+    requireAuth(["admin"]), checkSelf,
+    checkUserExists(DB), (req, res) => {
 
       //Check Username Change
       if (req.body.username !== req.params.username) {
@@ -64,14 +68,17 @@ module.exports = (app, DB) => {
 
     });
 
-  app.post("/users/:username/delete", requireAuth(["admin"]), checkSelf, (req, res) => {
-    //CANT DELETE SELF
+  app.post(
+    "/users/:username/delete",
+    requireAuth(["admin"]),
+    checkSelf, checkUserExists(DB), (req, res) => {
+      //CANT DELETE SELF
 
-    DB.deleteUser(req.params.username, () => {
-      res.redirect("/users");
+      DB.deleteUser(req.params.username, () => {
+        res.redirect("/users");
+      });
+
     });
-
-  });
 
   app.post(
     "/users/new",

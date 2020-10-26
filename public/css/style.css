@@ -163,3 +163,13 @@ td button, td input{
 .fa-times-circle {
   color: red;
 }
+
+.fof{
+  font-size: 60px;
+  text-align: center;
+  font-weight: 900;
+}
+.pnf{
+  font-size: 40px;
+  text-align: center;
+}

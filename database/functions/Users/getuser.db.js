@@ -8,6 +8,8 @@ module.exports = function (username, cb) {
     if (err) {
       console.log(err);
       return
+    } else if (!row) {
+      cb(false);
     } else {
       console.log(row);
       cb(row);

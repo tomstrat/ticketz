@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const { DatabaseAPI } = require("./database/database");
 const dbMeta = require("./database/dbSchema");
+const errorPage = require("./views/404");
 
 const DB_PATH = "./database/sqlite.db";
 
@@ -20,6 +21,10 @@ require('./routes/user/login')(app, DB);
 require("./routes/admin/users")(app, DB);
 require("./routes/user/logout")(app, DB);
 require("./routes/ticketz/tickets")(app, DB);
+
+app.use((req, res) => {
+  res.status(404).send(errorPage({ admin: req.session.userRole }));
+})
 
 const PORT = process.env.PORT || 3000;
 
