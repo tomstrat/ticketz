@@ -1,0 +1,8 @@
+{
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/7d974181-2ab3-4b77-946d-3cb2c71b204e/resourceGroups/ticketz/providers/Microsoft.Web/sites/ticketz",
+  "appService.deploySubpath": "."
+}

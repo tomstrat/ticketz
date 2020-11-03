@@ -5,6 +5,8 @@ const { DatabaseAPI } = require("./database/database");
 const dbMeta = require("./database/dbSchema");
 const errorPage = require("./views/404");
 
+require("dotenv").config();
+
 const DB_PATH = "./database/sqlite.db";
 
 const DB = new DatabaseAPI(DB_PATH, dbMeta.dbSchema);
