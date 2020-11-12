@@ -11,9 +11,18 @@ module.exports = (app) => {
       password: pw,
       role: "admin"
     }
+    const testTicket = {
+      title: "Test Ticket",
+      desc: "This is a Desc",
+      publishedDate: "12/11/2020",
+      userId: 1
+    }
 
     User.create(testUser)
-      .then(user => res.json(user));
+      .then(user => {
+        Ticket.create(testTicket)
+          .then(ticket => res.json(ticket))
+      });
 
   });
 

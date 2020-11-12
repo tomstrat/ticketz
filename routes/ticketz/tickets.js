@@ -3,6 +3,9 @@ const ticketsPage = require("../../views/ticketz/tickets");
 const singleTicketPage = require("../../views/ticketz/viewticket");
 const { handleErrors, requireAuth, checkMyTicket, checkTicketExists } = require("../middlewares");
 const validators = require("../validators");
+const { User, Ticket } = require("../../sequelize");
+const tickets = require('../../views/ticketz/tickets');
+const moment = require("moment");
 
 module.exports = (app, DB) => {
 
@@ -15,15 +18,20 @@ module.exports = (app, DB) => {
   app.get("/ticketz", requireAuth(["admin", "reviewer", "user"]), (req, res) => {
     //SEND ALL TICKETZ OR JUST USERS
     if (req.session.userRole === "user") {
-      DB.getUser(req.session.userId, (data) => {
-        DB.getMyTickets(data.id, (tickets) => {
-          res.send(ticketsPage({ tickets, admin: req.session.userRole }));
+
+      User.findOne({ where: { username: req.session.userId } })
+        .then(user => {
+          Ticket.findAll({ where: { userId: user.id } })
+            .then(tickets => {
+              ticketsPage({ tickets, admin: req.session.userRole });
+            });
         });
-      });
+
     } else {
-      DB.getAllTickets((data) => {
-        res.send(ticketsPage({ tickets: data, admin: req.session.userRole }))
-      });
+
+      Ticket.findAll()
+        .then(tickets => res.send(ticketsPage({ tickets, admin: req.session.userRole })));
+
     }
   });
 
@@ -36,33 +44,29 @@ module.exports = (app, DB) => {
     requireAuth(["admin", "reviewer", "user"]),
     checkMyTicket(DB),
     checkTicketExists(DB), (req, res) => {
-      DB.getTicket(req.params.id, (data) => {
-        res.send(singleTicketPage({ ticket: data, admin: req.session.userRole }));
-      });
+      Ticket.findOne({ where: { id: req.params.id } })
+        .then(ticket => res.send(singleTicketPage({ ticket, admin: req.session.userRole })));
     });
 
   app.post("/ticketz/:id/delete", requireAuth(["admin"]), checkTicketExists(DB), (req, res) => {
-    DB.deleteTicket(req.params.id, () => {
-      res.redirect("/ticketz");
-    });
+    Ticket.destroy({ where: { id: req.params.id } })
+      .then(ticket => res.redirect("/ticketz"));
   });
 
   app.post(
     "/ticketz/:id/resolve",
     requireAuth(["admin", "reviewer", "user"]),
     checkTicketExists(DB), (req, res) => {
-      DB.updateTicket({ bool: 1, id: req.params.id }, () => {
-        res.redirect("/ticketz");
-      });
+      Ticket.update({ resolved: 1 }, { where: { id: req.params.id } })
+        .then(ticket => res.redirect("/ticketz"));
     });
 
   app.post(
     "/ticketz/:id/unresolve",
     requireAuth(["admin", "reviewer", "user"]),
     checkTicketExists(DB), (req, res) => {
-      DB.updateTicket({ bool: 0, id: req.params.id }, () => {
-        res.redirect("/ticketz");
-      });
+      Ticket.update({ resolved: 0 }, { where: { id: req.params.id } })
+        .then(ticket => res.redirect("/ticketz"));
     });
 
   app.post(
@@ -73,9 +77,11 @@ module.exports = (app, DB) => {
     ], handleErrors(addTicketForm), requireAuth(["admin", "reviewer", "user"]), (req, res) => {
       const { title, desc } = req.body;
 
-      DB.getUser(req.session.userId, (data) => {
-        DB.createTicket({ userID: data.id, title, desc });
-      });
-      res.redirect("/ticketz");
+      const publishedDate = moment().format("DD/MM/YYYY");
+      User.findOne({ where: { username: req.session.userId } })
+        .then(user => {
+          Ticket.create({ userId: user.id, title, desc, publishedDate })
+            .then(ticket => res.redirect("/ticketz"));
+        });
     });
 };

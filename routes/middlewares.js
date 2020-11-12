@@ -1,5 +1,7 @@
 const { validationResult } = require("express-validator");
 const errorPage = require("../views/404");
+const { User, Ticket } = require("../sequelize");
+const user = require("../models/user");
 
 module.exports = {
   handleErrors(templateFunc, dataCb) {
@@ -53,13 +55,19 @@ module.exports = {
   checkMyTicket(DB) {
     return (req, res, next) => {
       if (req.session.userRole === "user") {
-        DB.getTicket(req.params.id, (data) => {
-          if (data.username !== req.session.userId) {
-            res.status(404).send(errorPage({ admin: req.session.userRole }));
-          } else {
-            next();
-          }
-        })
+
+        Ticket.findOne({ where: { id: req.params.id } })
+          .then(ticket => {
+            User.findOne({ where: { id: ticket.userId } })
+              .then(user => {
+                if (user.username !== req.session.userId) {
+                  res.status(404).send(errorPage({ admin: req.session.userRole }));
+                } else {
+                  next();
+                }
+              });
+          });
+
       } else {
         next();
       }
@@ -67,24 +75,20 @@ module.exports = {
   },
   checkTicketExists(DB) {
     return (req, res, next) => {
-      DB.getTicket(req.params.id, (data) => {
-        if (!data) {
-          res.status(404).send(errorPage({ admin: req.session.userRole }));
-        } else {
-          next();
-        }
-      });
+
+      Ticket.findOne({ where: { id: req.params.id } })
+        .then(ticket => next())
+        .catch(err => res.status(404).send(errorPage({ admin: req.session.userRole })));
+
     }
   },
   checkUserExists(DB) {
     return (req, res, next) => {
-      DB.getUser(req.params.username, (data) => {
-        if (!data) {
-          res.status(404).send(errorPage({ admin: req.session.userRole }));
-        } else {
-          next();
-        }
-      });
+
+      User.findOne({ where: { username: req.params.username } })
+        .then(user => next())
+        .catch(err => res.status(404).send(errorPage({ admin: req.session.userRole })));
+
     }
   }
 
