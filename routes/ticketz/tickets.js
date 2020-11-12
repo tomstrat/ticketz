@@ -1,4 +1,3 @@
-const { check } = require('express-validator');
 const addTicketForm = require('../../views/ticketz/addticket');
 const ticketsPage = require("../../views/ticketz/tickets");
 const singleTicketPage = require("../../views/ticketz/viewticket");

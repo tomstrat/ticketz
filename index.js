@@ -21,8 +21,9 @@ app.use(express.static("./public"));
 
 require('./routes/user/login')(app, DB);
 require("./routes/admin/users")(app, DB);
-require("./routes/user/logout")(app, DB);
+require("./routes/user/logout")(app);
 require("./routes/ticketz/tickets")(app, DB);
+require("./routes/newRoutes")(app);
 
 app.use((req, res) => {
   res.status(404).send(errorPage({ admin: req.session.userRole }));

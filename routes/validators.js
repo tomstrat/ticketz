@@ -1,6 +1,7 @@
 
 const { check } = require("express-validator");
 const comparePasswords = require("../utilities/comparepasswords");
+const { User } = require("../sequelize");
 
 module.exports = (DB) => {
   return {
@@ -9,12 +10,9 @@ module.exports = (DB) => {
       .escape()
       .custom(async username => {
         return await new Promise((resolve, reject) => {
-          DB.getUser(username, (data) => {
-            if (!data) {
-              reject("Username or password incorrect");
-            }
-            resolve();
-          });
+          User.findOne({ where: { username: username } })
+            .then(user => resolve())
+            .catch(err => reject("Username or password incorrect"));
         });
       }),
     requireNewUsername: check("username")
@@ -22,12 +20,9 @@ module.exports = (DB) => {
       .escape()
       .custom(async username => {
         return await new Promise((resolve, reject) => {
-          DB.getUser(username, (data) => {
-            if (data) {
-              reject("Username already exists!");
-            }
-            resolve();
-          });
+          User.findOne({ where: { username: username } })
+            .then(user => reject("Username already exists!"))
+            .catch(err => resolve());
         });
       }),
     requireEditUsername: check("username")
@@ -37,12 +32,9 @@ module.exports = (DB) => {
         //Check if username is own name
         if (req.session.userId !== username) {
           return await new Promise((resolve, reject) => {
-            DB.getUser(username, (data) => {
-              if (data) {
-                reject("Username already exists!");
-              }
-            });
-            resolve();
+            User.findOne({ where: { username: username } })
+              .then(user => reject("Username already exists!"))
+              .catch(err => resolve());
           });
         }
       }),
@@ -51,16 +43,26 @@ module.exports = (DB) => {
       .escape()
       .custom(async (password, { req }) => {
         return await new Promise((resolve, reject) => {
-          DB.getUser(req.body.username, async (data) => {
-            if (!data) {
-              reject("Username or password incorrect");
-            }
-            const validPassword = await comparePasswords(password, data.password);
-            if (!validPassword) {
-              reject("Username or password incorrect");
-            }
-            resolve();
-          })
+
+          User.findOne({ where: { username: req.body.username } })
+            .then(data => {
+              if (!comparePasswords(password, data.password)) {
+                reject("Username or password incorrect");
+              }
+            })
+            .catch(err => reject("Username or password incorrect"));
+
+          // DB.getUser(req.body.username, async (data) => {
+          //   if (!data) {
+          //     reject("Username or password incorrect");
+          //   }
+          //   const validPassword = await comparePasswords(password, data.password);
+          //   if (!validPassword) {
+          //     reject("Username or password incorrect");
+          //   }
+          //   resolve();
+          // })
+
         });
       }),
     requireNewPassword: check("password")
