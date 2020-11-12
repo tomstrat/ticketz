@@ -1,12 +1,14 @@
 const { User, Ticket } = require("../sequelize");
+const hasher = require("../utilities/hasher");
 
 module.exports = (app) => {
 
-  app.get("/testUser", (req, res) => {
+  app.get("/testUser", async (req, res) => {
 
+    const pw = await hasher("password");
     const testUser = {
       username: "Tom",
-      password: "password",
+      password: pw,
       role: "admin"
     }
 

@@ -48,6 +48,8 @@ module.exports = (DB) => {
             .then(data => {
               if (!comparePasswords(password, data.password)) {
                 reject("Username or password incorrect");
+              } else {
+                resolve();
               }
             })
             .catch(err => reject("Username or password incorrect"));

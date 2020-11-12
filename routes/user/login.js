@@ -1,3 +1,4 @@
+const { User } = require('../../sequelize');
 const form = require('../../views/login');
 const { handleErrors } = require("../middlewares");
 const validators = require("../validators");
@@ -22,11 +23,12 @@ module.exports = (app, DB) => {
       requirePassword
     ], handleErrors(form), (req, res) => {
 
-      DB.getUser(req.body.username, data => {
-        req.session.userId = data.username;
-        req.session.userRole = data.role;
-        return res.redirect("/ticketz");
-      });
+      User.findOne({ where: { username: req.body.username } })
+        .then(data => {
+          req.session.userId = data.username;
+          req.session.userRole = data.role;
+          return res.redirect("/ticketz");
+        });
 
     });
 };
