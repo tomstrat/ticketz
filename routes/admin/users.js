@@ -6,20 +6,17 @@ const validators = require("../validators");
 const { User, Ticket } = require("../../sequelize");
 const hasher = require("../../utilities/hasher");
 const user = require('../../models/user');
+const {
+  requireNewUsername,
+  requireNewPassword,
+  requirePasswordConfirmation,
+  requireEditPassword,
+  requireEditPasswordConfirmation,
+  requireEditUsername
+} = validators()
 
 
-
-module.exports = (app, DB) => {
-
-  //DESTRUCTURE THIS HERE SO I CAN PASS DB IN
-  const {
-    requireNewUsername,
-    requireNewPassword,
-    requirePasswordConfirmation,
-    requireEditPassword,
-    requireEditPasswordConfirmation,
-    requireEditUsername
-  } = validators(DB)
+module.exports = (app) => {
 
   app.get("/users", requireAuth(["admin"]), (req, res) => {
     User.findAll().then(users => res.send(usersPage({ users })));
@@ -32,7 +29,7 @@ module.exports = (app, DB) => {
   app.get(
     "/users/:username/edit",
     requireAuth(["admin"]),
-    checkSelf, checkUserExists(DB), (req, res) => {
+    checkSelf, checkUserExists(), (req, res) => {
       //CANT EDIT SELF
 
       User.findOne({ where: { username: req.params.username } })
@@ -51,7 +48,7 @@ module.exports = (app, DB) => {
       return { username: req.body.username, role: req.body.role }
     }),
     requireAuth(["admin"]), checkSelf,
-    checkUserExists(DB), (req, res) => {
+    checkUserExists(), (req, res) => {
 
       //Check Username Change
       if (req.body.username !== req.params.username) {
@@ -72,7 +69,7 @@ module.exports = (app, DB) => {
   app.post(
     "/users/:username/delete",
     requireAuth(["admin"]),
-    checkSelf, checkUserExists(DB), (req, res) => {
+    checkSelf, checkUserExists(), (req, res) => {
       //CANT DELETE SELF
       User.destroy({ where: { username: req.params.username } })
         .then(user => res.redirect("/users"));

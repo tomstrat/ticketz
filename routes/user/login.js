@@ -2,11 +2,9 @@ const { User } = require('../../sequelize');
 const form = require('../../views/login');
 const { handleErrors } = require("../middlewares");
 const validators = require("../validators");
+const { requireUsername, requirePassword } = validators()
 
-module.exports = (app, DB) => {
-
-  //DESTRUCTURE THIS HERE SO I CAN PASS DB IN
-  const { requireUsername, requirePassword } = validators(DB)
+module.exports = (app) => {
 
   app.get('/', (req, res) => {
     if (req.session.userRole) {

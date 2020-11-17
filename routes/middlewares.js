@@ -52,7 +52,7 @@ module.exports = {
     }
   },
 
-  checkMyTicket(DB) {
+  checkMyTicket() {
     return (req, res, next) => {
       if (req.session.userRole === "user") {
 
@@ -73,7 +73,7 @@ module.exports = {
       }
     }
   },
-  checkTicketExists(DB) {
+  checkTicketExists() {
     return (req, res, next) => {
 
       Ticket.findOne({ where: { id: req.params.id } })
@@ -82,7 +82,7 @@ module.exports = {
 
     }
   },
-  checkUserExists(DB) {
+  checkUserExists() {
     return (req, res, next) => {
 
       User.findOne({ where: { username: req.params.username } })

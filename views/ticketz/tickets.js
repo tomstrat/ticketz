@@ -8,8 +8,8 @@ module.exports = ({ tickets, admin }) => {
       <tr>
         ${admin !== "user" ? "<td>" + ticket.username + "</td>" : ""}
         <td><a href="/ticketz/${ticket.id}"/>${ticket.title}</a></td>
-        <td>${ticket.publish_date}</td>
-        <td>${ticket.resolve_date}</td>
+        <td>${ticket.publishedDate}</td>
+        <td>${ticket.resolvedDate === null ? "" : ticket.resolvedDate}</td>
         <td>${ticket.resolved ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}</td>
       </tr>
     `;

@@ -18,11 +18,9 @@ module.exports = (app) => {
       userId: 1
     }
 
-    User.create(testUser)
-      .then(user => {
-        Ticket.create(testTicket)
-          .then(ticket => res.json(ticket))
-      });
+    await User.create(testUser)
+    const ticket = await Ticket.create(testTicket)
+    res.json(ticket);
 
   });
 

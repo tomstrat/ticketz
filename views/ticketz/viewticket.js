@@ -25,9 +25,9 @@ module.exports = ({ ticket, admin }) => {
     ${admin !== "user" ? "<h4>" + ticket.username + "</h4>" : ""}
     <p class="title"><strong>Title:</strong> ${ticket.title}</p>
     <p class="desc"><strong>Description:</strong><br /> ${ticket.desc}</p>
-    <p><strong>Created:</strong>${ticket.publishDate}</p>
+    <p><strong>Created:</strong>${ticket.publishedDate}</p>
     <p><strong>resolved:</strong> ${ticket.resolved ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}</p>
-    ${ticket.resolved ? "<p>" + ticket.resolveDate + "</p>" : ""}
+    ${ticket.resolved ? "<p>" + ticket.resolvedDate + "</p>" : ""}
     ${admin === "admin" ? deleteForm : ""}
     ${admin !== "user" && ticket.resolved ? unresolveForm : ""}
     ${admin !== "user" && !ticket.resolved ? resolveForm : ""}

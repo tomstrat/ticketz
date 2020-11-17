@@ -3,7 +3,7 @@ const { check } = require("express-validator");
 const comparePasswords = require("../utilities/comparepasswords");
 const { User } = require("../sequelize");
 
-module.exports = (DB) => {
+module.exports = () => {
   return {
     requireUsername: check("username")
       .trim()
@@ -53,17 +53,6 @@ module.exports = (DB) => {
               }
             })
             .catch(err => reject("Username or password incorrect"));
-
-          // DB.getUser(req.body.username, async (data) => {
-          //   if (!data) {
-          //     reject("Username or password incorrect");
-          //   }
-          //   const validPassword = await comparePasswords(password, data.password);
-          //   if (!validPassword) {
-          //     reject("Username or password incorrect");
-          //   }
-          //   resolve();
-          // })
 
         });
       }),

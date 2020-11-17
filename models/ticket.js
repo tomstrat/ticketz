@@ -19,11 +19,11 @@ module.exports = (sequelize, type) => {
       defaultValue: 0
     },
     publishedDate: {
-      type: type.DATE,
+      type: type.STRING,
       allowNull: false,
     },
     resolvedDate: {
-      type: type.DATE,
+      type: type.STRING,
     }
   })
 }
