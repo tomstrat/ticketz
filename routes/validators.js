@@ -2,6 +2,7 @@
 const { check } = require("express-validator");
 const comparePasswords = require("../utilities/comparepasswords");
 const { User } = require("../sequelize");
+const user = require("../models/user");
 
 module.exports = () => {
   return {
@@ -11,8 +12,14 @@ module.exports = () => {
       .custom(async username => {
         return await new Promise((resolve, reject) => {
           User.findOne({ where: { username: username } })
-            .then(user => resolve())
-            .catch(err => reject("Username or password incorrect"));
+            .then(user => {
+              if (user) {
+                resolve()
+              } else {
+                reject("Username or password incorrect");
+              }
+            })
+            .catch(err => reject(err));
         });
       }),
     requireNewUsername: check("username")
@@ -21,8 +28,14 @@ module.exports = () => {
       .custom(async username => {
         return await new Promise((resolve, reject) => {
           User.findOne({ where: { username: username } })
-            .then(user => reject("Username already exists!"))
-            .catch(err => resolve());
+            .then(user => {
+              if (user) {
+                reject("Username already exists!")
+              } else {
+                resolve();
+              }
+            })
+            .catch(err => reject(err));
         });
       }),
     requireEditUsername: check("username")
@@ -33,8 +46,14 @@ module.exports = () => {
         if (req.session.userId !== username) {
           return await new Promise((resolve, reject) => {
             User.findOne({ where: { username: username } })
-              .then(user => reject("Username already exists!"))
-              .catch(err => resolve());
+              .then(user => {
+                if (user) {
+                  reject("Username already exists!")
+                } else {
+                  resolve();
+                }
+              })
+              .catch(err => reject(err));
           });
         }
       }),
@@ -45,14 +64,14 @@ module.exports = () => {
         return await new Promise((resolve, reject) => {
 
           User.findOne({ where: { username: req.body.username } })
-            .then(data => {
-              if (!comparePasswords(password, data.password)) {
+            .then(user => {
+              if (!comparePasswords(password, user.password)) {
                 reject("Username or password incorrect");
               } else {
                 resolve();
               }
             })
-            .catch(err => reject("Username or password incorrect"));
+            .catch(err => reject(err));
 
         });
       }),
