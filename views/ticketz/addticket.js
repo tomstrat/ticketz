@@ -7,9 +7,9 @@ module.exports = ({ errors, cb, admin }) => {
   <div class="viewMain">
     <form method="POST" action="/ticketz/new">
       <input class="titleInput" type="text" name="title" placeholder="Title">
-      ${getError(errors, "title")}
+      <span class="error">${getError(errors, "title")}</span>
       <textarea class="descInput" name="desc" placeholder="Description" rows="5" cols="50"></textarea>
-      ${getError(errors, "desc")}
+      <span class="error">${getError(errors, "desc")}</span>
       <input class="button" type="submit">
     </form>
   </div>

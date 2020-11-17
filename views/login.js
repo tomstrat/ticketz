@@ -9,7 +9,7 @@ module.exports = ({ errors }) => {
       <input class="addUserInput" type="text" name="username" placeholder="Username">
       <input class="addUserInput" type="password" name="password" placeholder="Password">
       <input class="button" type="submit">
-      ${getError(errors, "username") ? getError(errors, "username") : getError(errors, "password")}
+      <span class="error">${getError(errors, "username") ? getError(errors, "username") : getError(errors, "password")}</span>
     </form>
   </div>
 `);

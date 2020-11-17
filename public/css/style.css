@@ -173,3 +173,7 @@ td button, td input{
   font-size: 40px;
   text-align: center;
 }
+.error{
+  display:block;
+  text-align: center;
+}

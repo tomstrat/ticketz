@@ -27,7 +27,7 @@ module.exports = (app) => {
   app.get(
     "/users/:username/edit",
     requireAuth(["admin"]),
-    checkSelf, checkUserExists(), (req, res) => {
+    checkUserExists(), (req, res) => {
       //CANT EDIT SELF
 
       User.findOne({ where: { username: req.params.username } })
@@ -43,9 +43,9 @@ module.exports = (app) => {
       requireEditPasswordConfirmation
     ],
     handleErrors(editUsersForm, req => {
-      return { username: req.body.username, role: req.body.role }
+      return { username: req.params.username, role: req.body.role }
     }),
-    requireAuth(["admin"]), checkSelf,
+    requireAuth(["admin"]),
     checkUserExists(), (req, res) => {
 
       //Check Username Change

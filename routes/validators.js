@@ -42,6 +42,9 @@ module.exports = {
     .custom(async (username, { req }) => {
       //Check if username is own name
       if (req.params.username !== username) {
+        if (req.params.username === req.session.userId) {
+          throw new Error("Cant edit own username!");
+        }
         const user = await User.findOne({ where: { username: username } });
         if (user) {
           throw new Error("Username already exists!");

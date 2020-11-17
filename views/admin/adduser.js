@@ -7,11 +7,11 @@ module.exports = ({ errors }) => {
   <div class="viewMain">
     <form method="POST" action="/users/new">
       <input class="addUserInput" type="text" name="username" placeholder="Username">
-      ${getError(errors, "username")}
+      <span class="error">${getError(errors, "username")}</span>
       <input class="addUserInput" type="password" name="password" placeholder="Password">
-      ${getError(errors, "password")}
+      <span class="error">${getError(errors, "password")}</span>
       <input class="addUserInput" type="password" name="pwconfirmation" placeholder="Confirmation">
-      ${getError(errors, "pwconfirmation")}
+      <span class="error">${getError(errors, "pwconfirmation")}</span>
       <select class="selectInput" name="role">
         <option value="user">User</option>
         <option value="reviewer">Reviewer</option>

@@ -17,7 +17,7 @@ require('./routes/user/login')(app);
 require("./routes/admin/users")(app);
 require("./routes/user/logout")(app);
 require("./routes/ticketz/tickets")(app);
-require("./routes/newRoutes")(app);
+//require("./routes/newRoutes")(app);
 
 app.use((req, res) => {
   res.status(404).send(errorPage({ admin: req.session.userRole }));
