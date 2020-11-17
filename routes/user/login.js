@@ -1,8 +1,7 @@
 const { User } = require('../../sequelize');
 const form = require('../../views/login');
 const { handleErrors } = require("../middlewares");
-const validators = require("../validators");
-const { requireUsername, requirePassword } = validators()
+const { requireUsername, requirePassword } = require("../validators");
 
 module.exports = (app) => {
 

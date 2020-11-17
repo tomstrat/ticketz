@@ -2,13 +2,12 @@ const addTicketForm = require('../../views/ticketz/addticket');
 const ticketsPage = require("../../views/ticketz/tickets");
 const singleTicketPage = require("../../views/ticketz/viewticket");
 const { handleErrors, requireAuth, checkMyTicket, checkTicketExists } = require("../middlewares");
-const validators = require("../validators");
 const { User, Ticket } = require("../../sequelize");
 const moment = require("moment");
 const {
   requireTitle,
   requireDesc
-} = validators()
+} = require("../validators");
 
 module.exports = (app) => {
 

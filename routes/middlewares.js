@@ -1,7 +1,6 @@
 const { validationResult } = require("express-validator");
 const errorPage = require("../views/404");
 const { User, Ticket } = require("../sequelize");
-const user = require("../models/user");
 
 module.exports = {
   handleErrors(templateFunc, dataCb) {
@@ -15,7 +14,6 @@ module.exports = {
         if (dataCb) {
           data = dataCb(req);
         }
-
 
         console.log(`Errors: ${errors}`);
         return res.send(templateFunc({ errors, data, admin }));

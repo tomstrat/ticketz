@@ -2,10 +2,8 @@ const addUserForm = require('../../views/admin/adduser');
 const usersPage = require("../../views/admin/users");
 const editUsersForm = require("../../views/admin/edituser");
 const { handleErrors, requireAuth, checkSelf, checkUserExists } = require("../middlewares");
-const validators = require("../validators");
 const { User, Ticket } = require("../../sequelize");
 const hasher = require("../../utilities/hasher");
-const user = require('../../models/user');
 const {
   requireNewUsername,
   requireNewPassword,
@@ -13,7 +11,7 @@ const {
   requireEditPassword,
   requireEditPasswordConfirmation,
   requireEditUsername
-} = validators()
+} = require("../validators");
 
 
 module.exports = (app) => {
