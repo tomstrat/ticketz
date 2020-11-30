@@ -52,7 +52,13 @@ module.exports = (app) => {
     checkMyTicket(),
     checkTicketExists(), (req, res) => {
       Ticket.findOne({ where: { id: req.params.id } })
-        .then(ticket => res.send(singleTicketPage({ ticket, admin: req.session.userRole })));
+        .then(ticket => {
+          User.findOne({ where: { id: ticket.userId } })
+            .then(user => {
+              ticket.username = user.username;
+              res.send(singleTicketPage({ ticket, admin: req.session.userRole }));
+            });
+        });
     });
 
   app.post("/ticketz/:id/delete", requireAuth(["admin"]), checkTicketExists(), (req, res) => {
