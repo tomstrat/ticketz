@@ -80,10 +80,15 @@ module.exports = (app) => {
       requireNewUsername,
       requireNewPassword,
       requirePasswordConfirmation
-    ], handleErrors(addUserForm), requireAuth(["admin"]), (req, res) => {
+    ], handleErrors(addUserForm), requireAuth(["admin"]), async (req, res) => {
       const { username, password, role } = req.body;
-
-      User.create({ username, password, role })
+      let hashed;
+      try {
+        hashed = await hasher(password);
+      } catch (err) {
+        throw new Error(err);
+      }
+      User.create({ username, password: hashed, role })
         .then(user => res.redirect("/users"));
 
     });

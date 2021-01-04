@@ -20,7 +20,8 @@ module.exports = (app) => {
         .then(user => {
           Ticket.findAll({ where: { userId: user.id } })
             .then(tickets => {
-              ticketsPage({ tickets, admin: req.session.userRole });
+              console.log(tickets);
+              res.send(ticketsPage({ tickets, admin: req.session.userRole }));
             });
         });
 
